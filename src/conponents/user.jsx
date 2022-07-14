@@ -2,8 +2,8 @@ import React from "react";
 import Qualitie from "./qualitie";
 import Bookmark from "./bookmark";
 
-const User = (props) => {
-    return props.users.map(user => {
+const User = ({users, ...props}) => {
+    return users.map(user => {
         return (
             <tr key={user._id}>
                 <td>{user.name}</td>

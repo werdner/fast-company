@@ -10,7 +10,8 @@ const Bookmark = ({status}) => {
     return (
         <button className="btn btn-light" onClick={handleMark}>
             <i className={mark ? "bi bi-bookmark-fill" : "bi bi-bookmark"}></i>
-        </button>)
+        </button>
+    )
 
 }
 

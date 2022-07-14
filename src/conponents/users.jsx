@@ -5,7 +5,6 @@ import User from "./user";
 
 
 const Users = () => {
-
     const [users, setUsers] = useState(api.users.fetchAll())
 
     const handleDelete = (userId) => {
