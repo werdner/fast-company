@@ -1,9 +1,8 @@
-import React, {useState} from "react";
+import React from "react";
 import Qualitie from "./qualitie";
 import Bookmark from "./bookmark";
 
 const User = (props) => {
-    console.log(props.users)
 
     return props.users.map(user => {
         return (
