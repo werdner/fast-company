@@ -1,4 +1,4 @@
-const RenderPhrase = (props) => {
+const SearchStatus = (props) => {
     const classes = 'badge m-1 p-3 fs-6 bg-';
     const prefix = [
         ' человек тусанет с тобой сегодня',
@@ -16,4 +16,4 @@ const RenderPhrase = (props) => {
     }
 }
 
-export default RenderPhrase;
+export default SearchStatus;
