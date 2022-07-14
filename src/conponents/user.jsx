@@ -3,7 +3,6 @@ import Qualitie from "./qualitie";
 import Bookmark from "./bookmark";
 
 const User = (props) => {
-
     return props.users.map(user => {
         return (
             <tr key={user._id}>
