@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 
-const Bookmark = ({status, onBookmark}) => {
+const Bookmark = ({status}) => {
     const [mark, setMark] = useState(status);
-    
+
     const bookmarked = <i className="bi bi-bookmark-fill"></i>;
     const bookmark = <i className="bi bi-bookmark"></i>;
 
