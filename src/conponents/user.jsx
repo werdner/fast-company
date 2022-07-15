@@ -2,7 +2,7 @@ import React from "react";
 import Qualitie from "./qualitie";
 import Bookmark from "./bookmark";
 
-const User = ({users, ...props}) => {
+const User = ({users, ...props}) => { // компонент должен принимать объект user, а не users
     return users.map(user => {
         return (
             <tr key={user._id}>
