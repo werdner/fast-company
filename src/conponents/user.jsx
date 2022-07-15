@@ -20,8 +20,12 @@ const User = ({user, ...props}) => {
             <td className="">{user.profession.name}</td>
             <td>{user.completedMeetings}</td>
             <td>{user.rate}</td>
-            <td><Bookmark status={status} onBookmark={handleStatus}/></td>
-            <td><button className="btn btn-danger" onClick={() => props.onDelete(user._id)}>delete</button></td>
+            <td>
+                <Bookmark status={status} onBookmark={handleStatus}/>
+            </td>
+            <td>
+                <button className="btn btn-danger" onClick={() => props.onDelete(user._id)}>delete</button>
+            </td>
         </tr>
     )
 }
