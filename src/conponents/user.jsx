@@ -13,9 +13,9 @@ const User = ({user, ...props}) => {
         <tr>
             <td>{user.name}</td>
             <td>
-                <div>
+                <ul>
                     <Qualitie qualities={user.qualities} />
-                </div>
+                </ul>
             </td>
             <td className="">{user.profession.name}</td>
             <td>{user.completedMeetings}</td>
