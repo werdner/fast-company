@@ -5,6 +5,7 @@ const Bookmark = ({status}) => {
 
     const handleMark = () => {
         setMark(!mark);
+        // думаю ты сможешь сделать, чтобы это поле менялось в массиве user
     }
 
     return (
