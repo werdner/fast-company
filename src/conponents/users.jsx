@@ -3,6 +3,7 @@ import api from "../api";
 import Pagination from "./pagination";
 import SearchStatus from "./searchStatus";
 import User from "./user";
+import GroupList from "./groupList";
 import { paginate } from "../utils/paginate";
 
 const Users = () => {
@@ -26,6 +27,7 @@ const Users = () => {
     return (
         <>
             <SearchStatus number={count} />
+            <GroupList />
             <table className="table">
                 <thead>
                     <tr>
