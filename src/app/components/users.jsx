@@ -7,21 +7,27 @@ import GroupList from "./groupList";
 import api from "../api";
 import SearchStatus from "./searchStatus";
 
-const Users = ({ users: allUsers, ...rest }) => {
+const Users = (props) => {
     const [currentPage, setCurrentPage] = useState(1);
+    const [allUsers, setAllUsers] = useState();
     const [professions, setProfession] = useState();
-    const [selectedPropf, setSelectedProf] = useState();
+    const [selectedProf, setSelectedProf] = useState();
     const pageSize = 4;
 
     useEffect(() => {
-        api.professions
-            .fetchAll()
-            .then(data => setProfession(data));
+        Promise.all([
+            api.professions.fetchAll(),
+            api.users.fetchAll()
+        ]).then(respone => {
+            const [allProfessions, users] = respone;
+            setProfession(allProfessions);
+            setAllUsers(users);
+        });
     }, []);
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedPropf]);
+    }, [selectedProf]);
 
     const handleProfessionSelect = (item) => {
         setSelectedProf(item);
@@ -31,12 +37,13 @@ const Users = ({ users: allUsers, ...rest }) => {
         setCurrentPage(pageIndex);
     };
 
-    const filterUsers = selectedPropf
-        ? allUsers.filter(user => user.profession === selectedPropf)
+    const filterUsers = selectedProf
+        ? allUsers.filter(user => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
         : allUsers;
 
-    const count = filterUsers.length;
+    const count = filterUsers ? filterUsers.length : 0;
     const usersCrop = paginate(filterUsers, currentPage, pageSize);
+
     const clearFilter = () => {
         setSelectedProf();
     };
@@ -46,7 +53,7 @@ const Users = ({ users: allUsers, ...rest }) => {
             {professions && (
                 <div className="d-flex flex-column flex-shrin-0 p-3 me-2">
                     <GroupList
-                        selectedItem={selectedPropf}
+                        selectedItem={selectedProf}
                         items={professions}
                         onItemSelect={handleProfessionSelect}
                     />
@@ -70,7 +77,7 @@ const Users = ({ users: allUsers, ...rest }) => {
                         </thead>
                         <tbody>
                             {usersCrop.map((user) => (
-                                <User {...rest} {...user} key={user._id} />
+                                <User {...props} {...user} key={user._id} />
                             ))}
                         </tbody>
                     </table>
@@ -88,7 +95,7 @@ const Users = ({ users: allUsers, ...rest }) => {
     );
 };
 Users.propTypes = {
-    users: PropTypes.array
+    allUsers: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 
 export default Users;
