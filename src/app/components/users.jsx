@@ -7,22 +7,16 @@ import GroupList from "./groupList";
 import api from "../api";
 import SearchStatus from "./searchStatus";
 
-const Users = (props) => {
+const Users = ({ users: allUsers, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [allUsers, setAllUsers] = useState();
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const pageSize = 4;
 
     useEffect(() => {
-        Promise.all([
-            api.professions.fetchAll(),
-            api.users.fetchAll()
-        ]).then(respone => {
-            const [allProfessions, users] = respone;
-            setProfession(allProfessions);
-            setAllUsers(users);
-        });
+        api.professions
+            .fetchAll()
+            .then(response => setProfession(response));
     }, []);
 
     useEffect(() => {
@@ -77,7 +71,7 @@ const Users = (props) => {
                         </thead>
                         <tbody>
                             {usersCrop.map((user) => (
-                                <User {...props} {...user} key={user._id} />
+                                <User {...rest} {...user} key={user._id} />
                             ))}
                         </tbody>
                     </table>
@@ -95,7 +89,7 @@ const Users = (props) => {
     );
 };
 Users.propTypes = {
-    allUsers: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+    users: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 
 export default Users;
