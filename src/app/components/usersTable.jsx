@@ -5,6 +5,7 @@ import TableBody from "./tableBody";
 import BookMark from "./bookmark";
 import QualitiesList from "./qualitiesList";
 import Table from "./table";
+import { Link } from "react-router-dom";
 
 const UserTable = ({
     users,
@@ -17,7 +18,10 @@ const UserTable = ({
     const columns = {
         name: {
             path: "name",
-            name: "Имя"
+            name: "Имя",
+            component: user => (
+                <Link to={`/users/${user._id}`}>{user.name}</Link>
+            )
         },
         qualities: {
             name: "Качества",
