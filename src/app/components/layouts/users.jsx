@@ -23,7 +23,7 @@ const Users = () => {
             ? <UserPage {...userData} onAllUsers={handleUsers} />
             : "Loading...";
     } else {
-        return <UsersList />;
+        return <UsersList />; // не так 
     }
 };
 
