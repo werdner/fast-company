@@ -12,7 +12,7 @@ const UserPage = () => {
         history.push("/users");
     };
 
-    api.users.getById(userId)
+    api.users.getById(userId) // стоп, так нельзя делать, у тебя при каждом ренрдере будет происходить этот запрос, используй useEffect 
         .then(user => setUserData(user));
 
     return (
