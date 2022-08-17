@@ -1,29 +1,39 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import api from "../api";
 import QualitiesList from "./qualitiesList";
 
-const UserPage = ({ name, profession, qualities, completedMeetings, rate, onAllUsers }) => {
-    return (
-        <div>
-            <dl>
-                <dt className="fs-2">{name}</dt>
-                <dd className="fs-3 fw-bold">{"Профессия: " + profession.name}</dd>
-                <dd><QualitiesList qualities={qualities}/></dd>
-                <dd>{"CompletedMeetings: " + completedMeetings}</dd>
-                <dd className="fw-bold">{"Rate: " + rate}</dd>
-            </dl>
-            <button onClick={onAllUsers}>Все Пользователи</button>
-        </div>
-    );
-};
+const UserPage = () => {
+    const [userData, setUserData] = useState();
+    const history = useHistory();
+    const { userId } = useParams();
 
-UserPage.propTypes = {
-    name: PropTypes.string.isRequired,
-    profession: PropTypes.object.isRequired,
-    qualities: PropTypes.array.isRequired,
-    completedMeetings: PropTypes.number.isRequired,
-    rate: PropTypes.number.isRequired,
-    onAllUsers: PropTypes.func.isRequired
+    const handleUsers = () => {
+        history.push("/users");
+    };
+
+    api.users.getById(userId)
+        .then(user => setUserData(user));
+
+    return (
+        <>
+            {userData
+                ? (
+                    <div>
+                        <dl>
+                            <dt className="fs-2">{userData.name}</dt>
+                            <dd className="fs-3 fw-bold">{"Профессия: " + userData.profession.name}</dd>
+                            <dd><QualitiesList qualities={userData.qualities}/></dd>
+                            <dd>{"CompletedMeetings: " + userData.completedMeetings}</dd>
+                            <dd className="fw-bold">{"Rate: " + userData.rate}</dd>
+                        </dl>
+                        <button onClick={handleUsers}>Все Пользователи</button>
+                    </div>
+                )
+                : "Loading..."
+            }
+        </>
+    );
 };
 
 export default UserPage;

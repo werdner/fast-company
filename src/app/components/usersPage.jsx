@@ -107,7 +107,7 @@ const UsersList = () => {
             </div>
         );
     } else {
-        return "loading..";
+        return "Loading...";
     }
 };
 UsersList.propTypes = {
