@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import api from "../api";
 import QualitiesList from "./qualitiesList";
@@ -12,8 +12,10 @@ const UserPage = () => {
         history.push("/users");
     };
 
-    api.users.getById(userId)
-        .then(user => setUserData(user));
+    useEffect(() => {
+        api.users.getById(userId)
+            .then(user => setUserData(user));
+    }, []);
 
     return (
         <>
