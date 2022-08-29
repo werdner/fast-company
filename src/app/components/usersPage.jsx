@@ -7,11 +7,14 @@ import api from "../api";
 import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
 import _ from "lodash";
+import SearchUser from "./searchUser";
+import { findPerson } from "../utils/findPerson";
 
 const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
+    const [value, setValue] = useState("");
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 4;
 
@@ -59,6 +62,16 @@ const UsersList = () => {
         setSortBy(item);
     };
 
+    const clearFilter = () => {
+        setSelectedProf();
+    };
+
+    const handleSearchFieldChange = (e) => {
+        const { target } = e;
+        clearFilter();
+        setValue(target.value);
+    };
+
     if (users) {
         const filterUsers = selectedProf
             ? users.filter(user => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
@@ -68,9 +81,7 @@ const UsersList = () => {
         const sortedUsers = _.orderBy(filterUsers, [sortBy.path], [sortBy.order]);
         const usersCrop = paginate(sortedUsers, currentPage, pageSize);
 
-        const clearFilter = () => {
-            setSelectedProf();
-        };
+        const foundedUsers = 0 || findPerson(users, value);
 
         return (
             <div className="d-flex justify-content-center">
@@ -85,10 +96,11 @@ const UsersList = () => {
                     </div>
                 )}
                 <div className="d-flex flex-column">
-                    <SearchStatus length={count} />
+                    <SearchStatus length={foundedUsers.length || count} />
+                    <SearchUser value={value} handleChange={handleSearchFieldChange} />
                     {count > 0 && (
                         <UserTable
-                            users={usersCrop}
+                            users={foundedUsers || usersCrop}
                             onSort={handleSort}
                             selectedSort={sortBy}
                             onDelete={handleDelete}
@@ -97,7 +109,7 @@ const UsersList = () => {
                     )}
                     <div className="d-flex justify-content-center">
                         <Pagination
-                            itemsCount={count}
+                            itemsCount={foundedUsers.length > 0 ? foundedUsers.length : count}
                             pageSize={pageSize}
                             currentPage={currentPage}
                             onPageChange={handlePageChange}
