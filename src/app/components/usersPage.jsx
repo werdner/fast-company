@@ -80,8 +80,7 @@ const UsersList = () => {
         const count = filterUsers ? filterUsers.length : 0;
         const sortedUsers = _.orderBy(filterUsers, [sortBy.path], [sortBy.order]);
         const usersCrop = paginate(sortedUsers, currentPage, pageSize);
-
-        const foundedUsers = 0 || findPerson(users, value);
+        const foundedUsers = value.length > 0 ? findPerson(users, value) : 0;
 
         return (
             <div className="d-flex justify-content-center">
