@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import api from "../api";
-import QualitiesList from "./qualitiesList";
+import api from "../../../api";
+import QualitiesList from "../../ui/qualities/qualitiesList";
 
 const UserPage = () => {
     const [userData, setUserData] = useState();
@@ -9,7 +9,7 @@ const UserPage = () => {
     const { userId } = useParams();
 
     const handleUsers = () => {
-        history.push("/users");
+        history.replace(`/users/${userId}/edit`);
     };
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const UserPage = () => {
                             <dd>{"CompletedMeetings: " + userData.completedMeetings}</dd>
                             <dd className="fw-bold">{"Rate: " + userData.rate}</dd>
                         </dl>
-                        <button onClick={handleUsers}>Все Пользователи</button>
+                        <button onClick={handleUsers}>Изменить</button>
                     </div>
                 )
                 : "Loading..."

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { convertToObject } from "../utils/convertToObject";
+import { convertToObject } from "../../utils/convertToObject";
 
 const GroupList = ({ items, valueProperty, contentProperty, onItemSelect, selectedItem }) => {
     const itemsMap = convertToObject(items, "name");
