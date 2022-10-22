@@ -6,6 +6,7 @@ import { useHistory, useParams } from "react-router-dom";
 import MultiSelectField from "../common/form/multiSelectField";
 import RadioField from "../common/form/radioForm";
 import SelectField from "../common/form/selectField";
+import BackButton from "../common/backButton.jsx";
 
 const UserEditForm = () => {
     const { userId } = useParams();
@@ -139,6 +140,7 @@ const UserEditForm = () => {
 
     return (
         <div className="container mt-5">
+            <BackButton />
             <div className="row justifyContent">
                 <div className="col-md-6 offset-md-3 shadow p-4">
                     <form onSubmit={handleSubmit}>

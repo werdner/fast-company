@@ -1,39 +1,64 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import api from "../../../api";
-import QualitiesList from "../../ui/qualities/qualitiesList";
+import { CommentsContainer } from "./comment/index";
+import { CommentForm } from "./newCommtForm";
+import { InfoCard, MeetingsCard, QualitiesCard } from "./index";
 
 const UserPage = () => {
     const [userData, setUserData] = useState();
+    const [comments, setComments] = useState([]);
     const history = useHistory();
     const { userId } = useParams();
 
     const handleUsers = () => {
-        history.replace(`/users/${userId}/edit`);
+        history.push(`/users/${userId}/edit`);
     };
 
     useEffect(() => {
         api.users.getById(userId)
             .then(user => setUserData(user));
+        api.comments.fetchCommentsForUser(userId)
+            .then(comments => setComments(comments));
     }, []);
+
+    const onSubmit = (data) => {
+        api.comments.add({
+            pageId: userId,
+            userId: data.userId,
+            content: data.comment
+        }).then(response => console.log(response));
+        api.comments.fetchCommentsForUser(userId)
+            .then(comments => setComments(comments));
+    };
+
+    const onRemove = (commentId) => {
+        api.comments.remove(commentId).then(response => console.log(response));
+        api.comments.fetchCommentsForUser(userId)
+            .then(comments => setComments(comments));
+    };
 
     return (
         <>
-            {userData
-                ? (
-                    <div>
-                        <dl>
-                            <dt className="fs-2">{userData.name}</dt>
-                            <dd className="fs-3 fw-bold">{"Профессия: " + userData.profession.name}</dd>
-                            <dd><QualitiesList qualities={userData.qualities}/></dd>
-                            <dd>{"CompletedMeetings: " + userData.completedMeetings}</dd>
-                            <dd className="fw-bold">{"Rate: " + userData.rate}</dd>
-                        </dl>
-                        <button onClick={handleUsers}>Изменить</button>
+            {userData ? (
+                <div className="container">
+                    <div className="row gutters-sm">
+                        <div className="col-md-4 mb-3">
+                            <InfoCard userData={userData} handleUsers={handleUsers} />
+                            <QualitiesCard qualities={userData?.qualities} />
+                            <MeetingsCard completedMeetings={userData?.completedMeetings}/>
+                        </div>
+                        <div className="col-md-8">
+                            <div className="card mb-3">
+                                <CommentForm userId={userId} onSubmit={onSubmit} />
+                            </div>
+                            <div className="card mb-3">
+                                <CommentsContainer userId={userId} comments={comments} onRemove={onRemove} />
+                            </div>
+                        </div>
                     </div>
-                )
-                : "Loading..."
-            }
+                </div>
+            ) : "Loading"}
         </>
     );
 };

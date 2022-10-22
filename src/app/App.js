@@ -3,7 +3,7 @@ import NavBar from "./components/ui/navBar";
 import { Switch, Route } from "react-router-dom";
 import Main from "./components/layouts/main";
 import Login from "./components/layouts/login";
-import UserPage from "./components/page/userPage/userPage";
+import UserPage from "./components/page/userPage/index";
 import UsersListPage from "./components/page/usersListPage/usersListPage";
 import UserEditForm from "./components/ui/userEditForm";
 

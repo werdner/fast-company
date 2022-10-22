@@ -132,6 +132,7 @@ const RegisterForm = () => {
             qualities: getQualities(qualities)
         });
     };
+    console.log(professions);
 
     return (
         <>

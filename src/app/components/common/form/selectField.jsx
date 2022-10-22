@@ -24,7 +24,7 @@ const SelectField = ({
 
     return (
         <div className="mb-4">
-            <label htmlFor={name} className="form-label">{label}</label>
+            {label && <label htmlFor={name} className="form-label">{label}</label>}
             <select
                 className={getInputClasses()}
                 id={name}
@@ -36,7 +36,7 @@ const SelectField = ({
 
                 {optionsArray.length > 0 &&
                     optionsArray.map((option) => (
-                        <option value={option.label} key={option.value}>
+                        <option value={option.value} key={option.value}>
                             {option.label}
                         </option>
                     ))}
@@ -51,8 +51,8 @@ const SelectField = ({
 
 SelectField.propTypes = {
     defaultOption: PropTypes.string,
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    label: PropTypes.string,
+    value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     error: PropTypes.string,
     options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
