@@ -4,6 +4,7 @@ import api from "../../../api";
 import { CommentsContainer } from "./comment/index";
 import { CommentForm } from "./newCommtForm";
 import { InfoCard, MeetingsCard, QualitiesCard } from "./index";
+import { quickSort } from "../../../utils/quickSort";
 
 const UserPage = () => {
     const [userData, setUserData] = useState();
@@ -19,7 +20,10 @@ const UserPage = () => {
         api.users.getById(userId)
             .then(user => setUserData(user));
         api.comments.fetchCommentsForUser(userId)
-            .then(comments => setComments(comments));
+            .then(comments => {
+                const sorted = quickSort(comments);
+                setComments(sorted);
+            });
     }, []);
 
     const onSubmit = (data) => {
@@ -37,6 +41,7 @@ const UserPage = () => {
         api.comments.fetchCommentsForUser(userId)
             .then(comments => setComments(comments));
     };
+    console.log(comments);
 
     return (
         <>

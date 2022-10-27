@@ -4,19 +4,34 @@ export function timeHasPassed(timestamp) {
     const day = Math.round(interval / 60 / 60 / 24);
     const minute = Math.round(interval / 60 % 60);
 
+    const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+    ];
+
     const dateYear = new Date(parseInt(timestamp)).getFullYear();
-    const dateMonth = new Date(parseInt(timestamp)).getMonth() + 1;
+    const dateMonth = new Date(parseInt(timestamp)).getMonth();
     const dateDay = new Date(parseInt(timestamp)).getDate();
     const dateHours = new Date(parseInt(timestamp)).getHours();
     const dateMinutes = new Date(parseInt(timestamp)).getMinutes();
 
     switch (true) {
     case (year > 0): {
-        return `${dateDay}.${dateMonth}.${dateYear}`;
+        return `${dateDay}.${dateMonth + 1}.${dateYear}`;
     }
 
     case (day >= 1): {
-        return `${dateDay}.${dateMonth}`;
+        return `${dateDay} ${months[dateMonth]}`;
     }
 
     case (minute > 30): {
