@@ -41,7 +41,6 @@ const UserPage = () => {
         api.comments.fetchCommentsForUser(userId)
             .then(comments => setComments(comments));
     };
-    console.log(comments);
 
     return (
         <>

@@ -9,6 +9,7 @@ import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import SearchUser from "../../searchUser";
 import { findPerson } from "../../../utils/findPerson";
+import { UserProvider, useUser } from "../../../hooks/useUsers";
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -18,26 +19,20 @@ const UsersListPage = () => {
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 4;
 
-    const [users, setUsers] = useState();
-
-    useEffect(() => {
-        api.users
-            .fetchAll()
-            .then(response => setUsers(response));
-    }, []);
+    const users = useUser();
 
     const handleDelete = (userId) => {
-        setUsers(users.filter((user) => user._id !== userId));
+        // setUsers(users.filter((user) => user._id !== userId));
+        console.log(userId);
     };
     const handleToggleBookMark = (id) => {
-        setUsers(
-            users.map((user) => {
-                if (user._id === id) {
-                    return { ...user, bookmark: !user.bookmark };
-                }
-                return user;
-            })
-        );
+        const newArray = users.map((user) => {
+            if (user._id === id) {
+                return { ...user, bookmark: !user.bookmark };
+            }
+            return user;
+        });
+        console.log(newArray);
     };
 
     useEffect(() => {
@@ -83,39 +78,41 @@ const UsersListPage = () => {
         const foundedUsers = value.length > 0 ? findPerson(users, value) : 0;
 
         return (
-            <div className="d-flex justify-content-center">
-                {professions && (
-                    <div className="d-flex flex-column flex-shrin-0 p-3 me-2">
-                        <GroupList
-                            selectedItem={selectedProf}
-                            items={professions}
-                            onItemSelect={handleProfessionSelect}
-                        />
-                        <button className="btn btn-secondary mt-2" onClick={clearFilter}>Очистить</button>
-                    </div>
-                )}
-                <div className="d-flex flex-column">
-                    <SearchStatus length={foundedUsers.length || count} />
-                    <SearchUser value={value} handleChange={handleSearchFieldChange} />
-                    {count > 0 && (
-                        <UserTable
-                            users={foundedUsers || usersCrop}
-                            onSort={handleSort}
-                            selectedSort={sortBy}
-                            onDelete={handleDelete}
-                            onToggleBookMark={handleToggleBookMark}
-                        />
+            <UserProvider>
+                <div className="d-flex justify-content-center">
+                    {professions && (
+                        <div className="d-flex flex-column flex-shrin-0 p-3 me-2">
+                            <GroupList
+                                selectedItem={selectedProf}
+                                items={professions}
+                                onItemSelect={handleProfessionSelect}
+                            />
+                            <button className="btn btn-secondary mt-2" onClick={clearFilter}>Очистить</button>
+                        </div>
                     )}
-                    <div className="d-flex justify-content-center">
-                        <Pagination
-                            itemsCount={value.length > 0 ? foundedUsers.length : count}
-                            pageSize={pageSize}
-                            currentPage={currentPage}
-                            onPageChange={handlePageChange}
-                        />
+                    <div className="d-flex flex-column">
+                        <SearchStatus length={foundedUsers.length || count} />
+                        <SearchUser value={value} handleChange={handleSearchFieldChange} />
+                        {count > 0 && (
+                            <UserTable
+                                users={foundedUsers || usersCrop}
+                                onSort={handleSort}
+                                selectedSort={sortBy}
+                                onDelete={handleDelete}
+                                onToggleBookMark={handleToggleBookMark}
+                            />
+                        )}
+                        <div className="d-flex justify-content-center">
+                            <Pagination
+                                itemsCount={value.length > 0 ? foundedUsers.length : count}
+                                pageSize={pageSize}
+                                currentPage={currentPage}
+                                onPageChange={handlePageChange}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
+            </UserProvider>
         );
     } else {
         return "Loading...";

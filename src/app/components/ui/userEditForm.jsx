@@ -135,7 +135,7 @@ const UserEditForm = () => {
             qualities: getQualities(qualities)
         }));
 
-        history.replace(`/users/`);
+        history.replace(`/users/${userId}`);
     };
 
     return (
