@@ -14,7 +14,7 @@ export const UserProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    async function getUsers() {
+    async function getUsersList() {
         try {
             const { content } = await userService.get();
             setUsers(content);
@@ -31,7 +31,7 @@ export const UserProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        getUsers();
+        getUsersList();
     }, []);
 
     useEffect(() => {
