@@ -63,7 +63,12 @@ const LoginForm = () => {
         e.preventDefault();
 
         if (isValid) return;
-        console.log(data);
+        try {
+            await logIn(data);
+            history.push("/");
+        } catch (error) {
+            setErrors(error);
+        }
     };
 
     return (
