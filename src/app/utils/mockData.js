@@ -45,12 +45,10 @@ export const useMockData = () => {
             }
             for (const user of users) {
                 await httpService.put("user/" + user._id, user);
-                console.log(user);
                 incrementCount();
             }
             for (const quality of qualities) {
                 await httpService.put("quality/" + quality._id, quality);
-                console.log("await", "quality/" + quality._id);
                 incrementCount();
             }
         } catch (error) {

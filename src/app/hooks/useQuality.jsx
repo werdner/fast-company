@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { qualityService } from "../services/qualitites.service";
-import { toast } from "react-toastify";
+import { useErrorCatch } from "./useErrorCatch";
 
 const QualityContext = React.createContext();
 
@@ -10,8 +10,7 @@ export const useQualities = () => useContext(QualityContext);
 export const QualityProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [qualities, setQualitites] = useState([]);
-    const [error, setError] = useState(null);
-    console.log("qualities", qualities);
+    const { catchError } = useErrorCatch();
 
     async function getQualitiesList() {
         try {
@@ -31,16 +30,6 @@ export const QualityProvider = ({ children }) => {
     useEffect(() => {
         getQualitiesList();
     }, []);
-
-    useEffect(() => {
-        error !== null && toast.error(error);
-        setError(null);
-    }, [error]);
-
-    function catchError(error) {
-        const { message } = error.response.data;
-        setError(message);
-    }
 
     return (
         <QualityContext.Provider value={{ isLoading, qualities, getQuality }}>

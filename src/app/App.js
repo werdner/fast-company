@@ -7,20 +7,24 @@ import { Users } from "./components/layouts/users";
 import { ToastContainer } from "react-toastify";
 import { ProfessionProvider } from "./hooks/useProfession";
 import { QualityProvider } from "./hooks/useQuality";
+import { AuthProvider } from "./hooks/useAuth";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
     return (
         <div className="d-flex flex-column align-items-center">
-            <NavBar />
-            <ProfessionProvider>
-                <QualityProvider>
-                    <Switch>
-                        <Route path="/users/:userId?/:edit?" component={Users}/>
-                        <Route path="/login/:type?" component={Login}/>
-                        <Route path="/main" component={Main}/>
-                        <Route component={Main}/>
-                    </Switch>
-                </QualityProvider>
-            </ProfessionProvider>
+            <AuthProvider>
+                <NavBar />
+                <ProfessionProvider>
+                    <QualityProvider>
+                        <Switch>
+                            <Route path="/users/:userId?/:edit?" component={Users}/>
+                            <Route path="/login/:type?" component={Login}/>
+                            <Route path="/main" component={Main}/>
+                            <Route component={Main}/>
+                        </Switch>
+                    </QualityProvider>
+                </ProfessionProvider>
+            </AuthProvider>
             <ToastContainer />
         </div>
     );

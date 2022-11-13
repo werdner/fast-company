@@ -15,7 +15,6 @@ const UserPage = () => {
     const handleUsers = () => {
         history.push(`/users/${userId}/edit`);
     };
-    console.log("userid", userId);
 
     useEffect(() => {
         api.users.getById(userId)

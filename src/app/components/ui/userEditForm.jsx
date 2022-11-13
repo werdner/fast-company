@@ -108,7 +108,6 @@ const UserEditForm = () => {
         }
     };
     const getQualities = (elements) => {
-        console.log(qualities);
         const qualitiesArray = [];
         for (const elem of elements) {
             for (const quality in qualities) {
