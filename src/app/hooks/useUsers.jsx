@@ -25,12 +25,16 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    function getUserById(userId) {
+        return users.find(user => user._id === userId);
+    }
+
     useEffect(() => {
         getUsersList();
     }, []);
 
     return (
-        <UserContext.Provider value={users}>
+        <UserContext.Provider value={{ users, getUserById }}>
             {!isLoading ? children : "Loading..."}
         </UserContext.Provider>
     );

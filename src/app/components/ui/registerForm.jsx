@@ -15,6 +15,7 @@ const RegisterForm = () => {
         email: "",
         password: "",
         profession: "",
+        name: "",
         sex: "male",
         qualities: [],
         licence: false
@@ -42,6 +43,15 @@ const RegisterForm = () => {
     }, [data]);
 
     const validatorConfig = {
+        name: {
+            isRequired: {
+                message: "Name is required"
+            },
+            min: {
+                message: "Name must have at least 3 characters",
+                value: 3
+            }
+        },
         email: {
             isRequired: {
                 message: "Email field is required"
@@ -106,6 +116,15 @@ const RegisterForm = () => {
     return (
         <>
             <form onSubmit={handleSubmit}>
+                <TextField
+                    label="Name"
+                    type="text"
+                    value={data.name}
+                    name="name"
+                    onChange={handleChange}
+                    error={errors.name}
+                />
+
                 <TextField
                     label="Email"
                     type="text"

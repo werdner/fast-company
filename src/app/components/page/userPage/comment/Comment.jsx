@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import api from "../../../../api";
 import { timeHasPassed } from "../../../../utils/timeHasPassed";
+import { useUser } from "../../../../hooks/useUsers";
+import { useAuth } from "../../../../hooks/useAuth";
 
 export const Comment = ({ userId, content, time, commentId, onRemove }) => {
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        api.users.getById(userId)
-            .then(user => setUser(user));
-    }, []);
+    const { getUserById } = useUser();
+    const { currentUser } = useAuth();
+    const user = getUserById(userId);
 
     const handleClick = () => {
         onRemove(commentId);
@@ -17,31 +15,13 @@ export const Comment = ({ userId, content, time, commentId, onRemove }) => {
 
     const timePassed = timeHasPassed(time);
 
-    if (!user) {
-        return (
-            <div className="bg-light card-body mb-3">
-                <div className="row">
-                    <div className="col">
-                        <span className="small">
-                            Loading
-                        </span>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className="bg-light card-body mb-3">
             <div className="row">
                 <div className="col">
                     <div className="d-flex flex-start">
                         <img
-                            src={`https://avatars.dicebear.com/api/avataaars/${(
-                                Math.random() + 1
-                            )
-                                .toString(36)
-                                .substring(7)}.svg`}
+                            src={user.image}
                             className="rounded-circle shadow-1-strong me-3"
                             alt="avatar"
                             width="65"
@@ -56,12 +36,14 @@ export const Comment = ({ userId, content, time, commentId, onRemove }) => {
                                             {timePassed}
                                         </span>
                                     </p>
-                                    <button
-                                        className="btn btn-sm text-primary d-flex align-items-center"
-                                        onClick={handleClick}
-                                    >
-                                        <i className="bi bi-x-lg" />
-                                    </button>
+                                    {currentUser._id === userId && (
+                                        <button
+                                            className="btn btn-sm text-primary d-flex align-items-center"
+                                            onClick={handleClick}
+                                        >
+                                            <i className="bi bi-x-lg" />
+                                        </button>
+                                    )}
                                 </div>
                                 <p className="small mb-0">{content}</p>
                             </div>

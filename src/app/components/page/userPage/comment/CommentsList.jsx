@@ -10,7 +10,7 @@ export const CommentsList = ({ comments, onRemove }) => {
                     key={comment._id}
                     commentId={comment._id}
                     userId={comment.userId}
-                    content={comment.content}
+                    content={comment.comment}
                     time={comment.created_at.toString()}
                     onRemove={onRemove}
                 />

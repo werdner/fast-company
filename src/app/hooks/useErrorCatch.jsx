@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export const useErrorCatch = () => {
@@ -9,10 +9,10 @@ export const useErrorCatch = () => {
         clearError();
     }, [error]);
 
-    function catchError(error) {
+    const catchError = useCallback((error) => {
         const { message } = error.response.data.error;
         setError(message);
-    }
+    }, [error]);
 
     function clearError() { setError(null); }
 
