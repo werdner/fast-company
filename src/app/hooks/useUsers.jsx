@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { userService } from "../services/user.service";
 import { useErrorCatch } from "./useErrorCatch";
+import { useAuth } from "./useAuth";
 
 const UserContext = React.createContext();
 
@@ -11,6 +12,7 @@ export const useUser = () => {
 
 export const UserProvider = ({ children }) => {
     const [users, setUsers] = useState([]);
+    const { currentUser } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const { catchError } = useErrorCatch();
 
@@ -28,6 +30,15 @@ export const UserProvider = ({ children }) => {
     function getUserById(userId) {
         return users.find(user => user._id === userId);
     }
+
+    useEffect(() => {
+        if (!isLoading) {
+            setUsers(prevState => prevState.map(user => {
+                if (user._id === currentUser._id) return currentUser;
+                return user;
+            }));
+        }
+    }, [currentUser]);
 
     useEffect(() => {
         getUsersList();

@@ -9,6 +9,7 @@ const UserPage = () => {
     const { userId } = useParams();
     const { getUserById } = useUser();
     const history = useHistory();
+
     const userData = getUserById(userId);
 
     const handleUsers = () => {
