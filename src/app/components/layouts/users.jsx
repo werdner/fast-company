@@ -4,7 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { UserProvider } from "../../hooks/useUsers";
 import UserPage from "../page/userPage";
 import UsersListPage from "../page/usersListPage/usersListPage";
-import UserEditForm from "../ui/userEditForm";
+import UserEditForm from "../page/userEditForm";
 
 export const Users = () => {
     const params = useParams();

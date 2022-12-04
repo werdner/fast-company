@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import MultiSelectField from "../common/form/multiSelectField";
 import RadioField from "../common/form/radioForm";
 import SelectField from "../common/form/selectField";
 import BackButton from "../common/backButton.jsx";
 import { useProfessions } from "../../hooks/useProfession";
-import { useQualities } from "../../hooks/useQuality";
-import { useUser } from "../../hooks/useUsers";
 import { useAuth } from "../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getQualities, getQualitiesById } from "../../store/qualities";
 
 const UserEditForm = () => {
-    const { userId } = useParams();
     const { professions } = useProfessions();
-    const { qualities, getQuality } = useQualities();
-    const { getUserById } = useUser();
     const { currentUser, updateUserProfile } = useAuth();
     const [errors, setErrors] = useState({});
     const [data, setData] = useState({
@@ -25,6 +22,14 @@ const UserEditForm = () => {
         sex: "male",
         qualities: []
     });
+
+    const getTrasformedQualities = (elements) => {
+        const qualitiesArray = elements.map(elem => elem.value);
+        return qualitiesArray;
+    };
+
+    const qualities = useSelector(getQualities());
+    const qualitiesList = useSelector(getQualitiesById(getTrasformedQualities(qualities)));
 
     const history = useHistory();
 
@@ -51,19 +56,9 @@ const UserEditForm = () => {
     }, [data]);
 
     useEffect(() => {
-        const { qualities: userQualities } = getUserById(userId);
-
-        const transformedQualities = userQualities.map(quality => {
-            const qualityObject = getQuality(quality);
-            return {
-                label: qualityObject.name,
-                value: qualityObject._id
-            };
-        });
-
         setData({
             ...currentUser,
-            qualities: transformedQualities
+            qualities: qualitiesList
         });
     }, []);
 
@@ -97,10 +92,6 @@ const UserEditForm = () => {
 
     const isValid = Object.keys(errors).length !== 0;
 
-    const getQualities = (elements) => {
-        const qualitiesArray = elements.map(elem => elem.value);
-        return qualitiesArray;
-    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
@@ -108,7 +99,7 @@ const UserEditForm = () => {
         const { qualities } = data;
         const newData = {
             ...data,
-            qualities: getQualities(qualities)
+            qualities: getTrasformedQualities(qualities)
         };
         await updateUserProfile(newData);
         history.replace(`/users/${currentUser._id}`);

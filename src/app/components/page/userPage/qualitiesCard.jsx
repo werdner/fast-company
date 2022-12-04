@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import QualitiesList from "../../ui/qualities/qualitiesList";
 
 export const QualitiesCard = ({ qualities }) => {
+    console.log(qualities);
     return (
         <div className="card mb-3">
             <div className="card-body d-flex flex-column justify-content-center text-center">
