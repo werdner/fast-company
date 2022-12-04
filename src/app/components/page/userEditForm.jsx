@@ -6,13 +6,13 @@ import MultiSelectField from "../common/form/multiSelectField";
 import RadioField from "../common/form/radioForm";
 import SelectField from "../common/form/selectField";
 import BackButton from "../common/backButton.jsx";
-import { useProfessions } from "../../hooks/useProfession";
 import { useAuth } from "../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getQualities, getQualitiesById } from "../../store/qualities";
+import { getProfessions } from "../../store/professions";
 
 const UserEditForm = () => {
-    const { professions } = useProfessions();
+    const professions = useSelector(getProfessions());
     const { currentUser, updateUserProfile } = useAuth();
     const [errors, setErrors] = useState({});
     const [data, setData] = useState({

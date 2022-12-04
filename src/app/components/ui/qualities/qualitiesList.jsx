@@ -11,7 +11,7 @@ const QualitiesList = ({ qualities }) => {
     useEffect(() => {
         dispatch(loadQualitiesList());
     }, []);
-    console.log(qualitiesList);
+
     return (
         <>
             {qualitiesList.map((qual) => {
