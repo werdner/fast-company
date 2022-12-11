@@ -2,6 +2,7 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 import { authService } from "../services/auth.service";
 import { localStorageService } from "../services/localStorage.service";
 import { userService } from "../services/user.service";
+import { generateAuthError } from "../utils/generateAuthError";
 import { getRandomInt } from "../utils/getRandomInt";
 import { history } from "../utils/history";
 
@@ -65,6 +66,9 @@ const usersSlice = createSlice({
         userUpdateFailed: (state, action) => {
             state.error = action.payload;
             state.isLoading = false;
+        },
+        authRequested: (state) => {
+            state.error = null;
         }
     }
 });
@@ -109,7 +113,13 @@ export const login = ({ payload, redirect }) => async (dispatch) => {
         localStorageService.setTokens(data);
         history.push(redirect);
     } catch (error) {
-        dispatch(authRequestFaild(error.message));
+        const { code, message } = error.response.data.error;
+        if (code === 400) {
+            const errorMessage = generateAuthError(message);
+            dispatch(authRequestFaild(errorMessage));
+        } else {
+            dispatch(authRequestFaild(error.message));
+        }
     }
 };
 
@@ -175,6 +185,7 @@ export const getUserById = (userId) => (state) => {
 export const getIsLoggedIn = () => (state) => state.users.isLoggedIn;
 export const getDataStatus = () => (state) => state.users.dataLoaded;
 export const getUsersList = () => (state) => state.users.entities;
+export const getAuthErrors = () => (state) => state.users.error;
 export const getCurrentUserId = () => (state) => state.users.auth.userId;
 export const getCurrentUserData = () => (state) => {
     return state.users.entities
