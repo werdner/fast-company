@@ -55,13 +55,6 @@ const usersSlice = createSlice({
             state.isLoggedIn = false;
             state.auth = null;
             state.dataLoaded = false;
-        },
-        updateUserProfile: (state, action) => {
-            console.log(state, action);
-        },
-        usersUpdateFailed: (state, action) => {
-            state.error = action.payload;
-            state.isLoading = false;
         }
     }
 });
@@ -75,8 +68,7 @@ const {
     authRequestSuccess,
     authRequestFaild,
     userCreated,
-    userLoggedOut,
-    usersUpdateFailed
+    userLoggedOut
 } = actions;
 
 const authRequested = createAction("users/authRequested");
@@ -152,15 +144,6 @@ function createUser(payload) {
             dispatch(createUserField(error.message));
         }
     };
-};
-
-export const updateUserProfile = (data) => async (dispatch) => {
-    try {
-        const { content } = await userService.update(data);
-        console.log("CONTENT", content);
-    } catch (error) {
-        usersUpdateFailed(error);
-    }
 };
 
 export const getUserById = (userId) => (state) => {
