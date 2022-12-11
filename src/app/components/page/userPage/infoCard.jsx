@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getCurrentUserData } from "../../../store/users";
 
 export const InfoCard = ({ userData, handleUsers }) => {
-    const { currentUser } = useAuth();
+    const currentUser = useSelector(getCurrentUserData());
     return (
         <div className="card mb-3">
             <div className="card-body">

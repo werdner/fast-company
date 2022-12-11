@@ -1,16 +1,16 @@
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { InfoCard, MeetingsCard, QualitiesCard } from "./index";
-import { useUser } from "../../../hooks/useUsers";
 import { CommentsContainer } from "./comment/index";
 import { CommentsProvider } from "../../../hooks/useComments";
+import { useSelector } from "react-redux";
+import { getUserById } from "../../../store/users";
 
 const UserPage = () => {
     const { userId } = useParams();
-    const { getUserById } = useUser();
     const history = useHistory();
 
-    const userData = getUserById(userId);
+    const userData = useSelector(getUserById(userId));
 
     const handleUsers = () => {
         history.push(`/users/${userId}/edit`);

@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
 import CheckboxField from "../common/form/checkboxField";
-import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/users";
 
 const LoginForm = () => {
     const [data, setData] = useState({ email: "", password: "", stayOn: false });
     const [errors, setErrors] = useState({});
-    const { logIn } = useAuth();
+    const dispatch = useDispatch();
     const history = useHistory();
 
     const handleChange = (target) => {
@@ -59,18 +60,15 @@ const LoginForm = () => {
 
     const isValid = Object.keys(errors).length !== 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         if (isValid) return;
-        try {
-            await logIn(data);
-            const { pathname } = history.location?.state ?? {};
-            history.push((pathname && pathname !== "/login") || "/");
-        } catch (error) {
-            console.log(error);
-            setErrors(error);
-        }
+
+        const { pathname } = history.location?.state ?? {};
+
+        const redirect = (pathname && pathname !== "/login") || "/";
+        dispatch(login({ payload: data, redirect }));
     };
 
     return (

@@ -10,10 +10,12 @@ import { useAuth } from "../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getQualities, getQualitiesById } from "../../store/qualities";
 import { getProfessions } from "../../store/professions";
+import { getCurrentUserData } from "../../store/users";
 
 const UserEditForm = () => {
     const professions = useSelector(getProfessions());
-    const { currentUser, updateUserProfile } = useAuth();
+    const currentUser = useSelector(getCurrentUserData());
+    const { updateUserProfile } = useAuth();
     const [errors, setErrors] = useState({});
     const [data, setData] = useState({
         email: "",

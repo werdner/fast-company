@@ -8,10 +8,9 @@ import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import SearchUser from "../../searchUser";
 import { findPerson } from "../../../utils/findPerson";
-import { UserProvider, useUser } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professions";
+import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,8 +21,8 @@ const UsersListPage = () => {
     const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const pageSize = 4;
 
-    const { users } = useUser();
-    const { currentUser } = useAuth();
+    const users = useSelector(getUsersList());
+    const currentUserId = useSelector(getCurrentUserId());
 
     const handleDelete = (userId) => {
         // setUsers(users.filter((user) => user._id !== userId));
@@ -70,7 +69,7 @@ const UsersListPage = () => {
                 ? data.filter(user => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
                 : data;
 
-            return getUsers.filter(user => user._id !== currentUser._id);
+            return getUsers.filter(user => user._id !== currentUserId);
         }
 
         const filteredUsers = filterUsers(users);
@@ -81,7 +80,7 @@ const UsersListPage = () => {
         const foundedUsers = value.length > 0 ? findPerson(users, value) : 0;
 
         return (
-            <UserProvider>
+            <>
                 <div className="d-flex justify-content-center">
                     {professions && !professionsLoading && (
                         <div className="d-flex flex-column flex-shrin-0 p-3 me-2">
@@ -115,7 +114,7 @@ const UsersListPage = () => {
                         </div>
                     </div>
                 </div>
-            </UserProvider>
+            </>
         );
     } else {
         return "Loading...";
