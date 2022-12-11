@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { nanoid } from "nanoid";
 import { commentService } from "../services/comments.service";
+import { quickSort } from "../utils/quickSort";
 
 const commentsSlice = createSlice({
     name: "comments",
@@ -19,12 +21,21 @@ const commentsSlice = createSlice({
         commentsRequestFailed: (state, action) => {
             state.error = action.payload;
             state.isLoading = false;
+        },
+        commentRemoved: (state, action) => {
+            state.entities = state.entities.filter(comment => comment._id !== action.payload);
+        },
+        commentCreated: (state, action) => {
+            state.entities = quickSort([...state.entities, action.payload]);
+        },
+        commentError: (state, action) => {
+            state.error = action.payload;
         }
     }
 });
 
 const { reducer: commentsReducer, actions } = commentsSlice;
-const { commentsRequested, commentsRecieved, commentsRequestFailed } = actions;
+const { commentsRequested, commentsRecieved, commentsRequestFailed, commentRemoved, commentError, commentCreated } = actions;
 
 export const loadCommentsList = (userId) => async (dispatch) => {
     dispatch(commentsRequested());
@@ -34,6 +45,32 @@ export const loadCommentsList = (userId) => async (dispatch) => {
         dispatch(commentsRecieved(content));
     } catch (error) {
         dispatch(commentsRequestFailed(error.message));
+    }
+};
+
+export const removeComment = (id) => async (dispatch) => {
+    try {
+        const { content } = await commentService.removeComment(id);
+        if (content === null) dispatch(commentRemoved(id));
+    } catch (error) {
+        commentError(error);
+    }
+};
+
+export const createComment = (data, pageId, userId) => async (dispatch) => {
+    const comment = {
+        ...data,
+        _id: nanoid(),
+        pageId,
+        created_at: Date.now(),
+        userId
+    };
+
+    try {
+        const { content } = await commentService.createComment(comment);
+        dispatch(commentCreated(content));
+    } catch (error) {
+        commentError(error);
     }
 };
 

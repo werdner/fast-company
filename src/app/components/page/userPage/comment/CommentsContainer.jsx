@@ -4,13 +4,15 @@ import { CommentsList } from "./index";
 import { CommentForm } from "../newCommtForm";
 import { useComments } from "../../../../hooks/useComments";
 import { useDispatch, useSelector } from "react-redux";
-import { getComments, getCommentsLoadingStatus, loadCommentsList } from "../../../../store/comments";
+import { createComment, getComments, getCommentsLoadingStatus, loadCommentsList, removeComment } from "../../../../store/comments";
+import { getCurrentUserId } from "../../../../store/users";
 
 export const CommentsContainer = ({ userId }) => {
-    const { createComments, removeComment } = useComments();
+    const { createComments } = useComments();
     const comments = useSelector(getComments());
     const isLoading = useSelector(getCommentsLoadingStatus());
     const dispatch = useDispatch();
+    const currentUserId = useSelector(getCurrentUserId());
 
     useEffect(() => {
         dispatch(loadCommentsList(userId));
@@ -18,10 +20,11 @@ export const CommentsContainer = ({ userId }) => {
 
     const onSubmit = (data) => {
         createComments(data);
+        dispatch(createComment(data, userId, currentUserId));
     };
 
     const onRemove = (commentId) => {
-        removeComment(commentId);
+        dispatch(removeComment(commentId));
     };
 
     return (
