@@ -6,16 +6,15 @@ import MultiSelectField from "../common/form/multiSelectField";
 import RadioField from "../common/form/radioForm";
 import SelectField from "../common/form/selectField";
 import BackButton from "../common/backButton.jsx";
-import { useAuth } from "../../hooks/useAuth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getQualities, getQualitiesById } from "../../store/qualities";
 import { getProfessions } from "../../store/professions";
-import { getCurrentUserData } from "../../store/users";
+import { getCurrentUserData, updateUserData } from "../../store/users";
 
 const UserEditForm = () => {
     const professions = useSelector(getProfessions());
     const currentUser = useSelector(getCurrentUserData());
-    const { updateUserProfile } = useAuth();
+    const dispatch = useDispatch();
     const [errors, setErrors] = useState({});
     const [data, setData] = useState({
         email: "",
@@ -103,7 +102,7 @@ const UserEditForm = () => {
             ...data,
             qualities: getTrasformedQualities(qualities)
         };
-        await updateUserProfile(newData);
+        dispatch(updateUserData(newData));
         history.replace(`/users/${currentUser._id}`);
     };
 

@@ -55,6 +55,16 @@ const usersSlice = createSlice({
             state.isLoggedIn = false;
             state.auth = null;
             state.dataLoaded = false;
+        },
+        updateUserProfile: (state, action) => {
+            state.entities = state.entities.map(user => {
+                if (user._id === action.payload._id) return action.payload;
+                return user;
+            });
+        },
+        userUpdateFailed: (state, action) => {
+            state.error = action.payload;
+            state.isLoading = false;
         }
     }
 });
@@ -68,7 +78,9 @@ const {
     authRequestSuccess,
     authRequestFaild,
     userCreated,
-    userLoggedOut
+    userLoggedOut,
+    userUpdateFailed,
+    updateUserProfile
 } = actions;
 
 const authRequested = createAction("users/authRequested");
@@ -106,7 +118,6 @@ export const signUp = ({ email, password, ...rest }) => async (dispatch) => {
     try {
         const data = await authService.register({ email, password });
         localStorageService.setTokens(data);
-        console.log("data", data);
         dispatch(authRequestSuccess({
             userId: data.localId
         }));
@@ -144,6 +155,15 @@ function createUser(payload) {
             dispatch(createUserField(error.message));
         }
     };
+};
+
+export const updateUserData = (data) => async (dispatch) => {
+    try {
+        const { content } = await userService.update(data);
+        dispatch(updateUserProfile(content));
+    } catch (error) {
+        userUpdateFailed(error);
+    }
 };
 
 export const getUserById = (userId) => (state) => {

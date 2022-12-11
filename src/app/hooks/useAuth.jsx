@@ -39,7 +39,6 @@ export const AuthProvider = ({ children }) => {
     async function getUserData() {
         try {
             const { content } = await userService.getCurrentUser();
-            console.log("content", content);
             setCurrentUser(content);
         } catch (error) {
             catchError(error);
